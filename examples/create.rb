@@ -4,7 +4,7 @@ require 'voter-registration-client'
  
  VoterRegApi::Client.api_key = '' #get an api key from lockbox.dnc.org
  
- !VoterRegApi::Client.api_key.blank? || (puts("get an api key from lockbox.dnc.org"))
+ !VoterRegApi::Client.api_key.blank? || (return puts("Get an api key from lockbox.dnc.org to use the Voter Reg API"))
  
  attrs = {"previous_address_street"=>nil,
   "name_middle"=>'James',
