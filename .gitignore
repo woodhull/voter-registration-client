@@ -13,7 +13,6 @@ tmtags
 ## VIM
 *.swp
 
-
 ## RVM
 .rvmrc
 
@@ -27,3 +26,4 @@ rdoc
 pkg
 
 ## PROJECT::SPECIFIC
+voter-registration-client.gemspec
