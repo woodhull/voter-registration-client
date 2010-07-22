@@ -69,7 +69,7 @@ module VoterRegApi
 
     def string_to_boolean(string)
       return nil if string.blank?
-      str = self.downcase
+      str = string.downcase
       if str =~ /^(?:f(?:alse))$/ ||
         str =~ /^(?:n(?:o))$/ ||
         str == "0"
@@ -79,11 +79,19 @@ module VoterRegApi
     end
 
     def email_optin=(value)
-      @email_optin = string_to_boolean(value)
+      if value.class == String
+        @email_optin = string_to_boolean(value)
+      else
+        @email_optin = value
+      end
     end
 
     def sms_optin=(value)
-      @sms_optin = string_to_boolean(value)
+      if value.class == String
+        @sms_optin = string_to_boolean(value)
+      else
+        @sms_optin = value
+      end
     end
 
     def to_hash
