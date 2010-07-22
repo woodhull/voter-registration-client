@@ -40,6 +40,21 @@ module VoterRegApi
       registration
     end
 
+    def save
+      params = ["/api/registrations.json?key=#{api_key}", :query => {:registration => self.to_hash}]
+      if self.new_record?
+        self.attributes = Registration.post(*params)
+      else
+        self.attributes = Registration.put(*params)
+      end  
+      self
+    end
+    
+    def save!
+      self.save
+      self.valid?
+    end
+
     def self.find(id_sha1)
       response = get("/registrations/#{id_sha1}.json")
       if response.code.to_i == 200
@@ -140,7 +155,13 @@ module VoterRegApi
     def valid?
       !self.errors.any? && !self.link.blank?
     end
-
+    
+    def pdf_link
+      if self.link
+        self.link + "?id_number=#{self.id_number}"
+      end
+    end
+    
   end
 end
 
