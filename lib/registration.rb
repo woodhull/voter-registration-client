@@ -36,15 +36,16 @@ module VoterRegApi
 
     def self.create(args = {})
       registration = Registration.new(args)
-      registration.attributes = post("/api/registrations.json?key=#{api_key}", :query => {:registration => registration.to_hash})
+      registration.save
       registration
     end
 
     def save
-      params = ["/api/registrations.json?key=#{api_key}", :query => {:registration => self.to_hash}]
+      params = ["/api/registrations.json?key=#{api_key}", {:query => {:registration => self.to_hash}}]
       if self.new_record?
         self.attributes = Registration.post(*params)
       else
+        params[1].merge!({:headers => {"Content-Length" => "0"}})
         self.attributes = Registration.put(*params)
       end  
       self
@@ -118,6 +119,9 @@ module VoterRegApi
     end
 
     def attributes=(args = {})
+      if !args.is_a?(Hash) && args.response.code == "401"
+        raise InvalidCredentials
+      end
       args.each do | key, value |
         if self.respond_to?("#{key.to_s}=")
           self.send("#{key.to_s}=", value)
@@ -166,4 +170,6 @@ module VoterRegApi
 end
 
 class RecordNotFound < Exception
+end  
+class InvalidCredentials < Exception
 end
